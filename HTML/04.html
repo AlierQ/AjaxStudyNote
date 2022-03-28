@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax实现无刷新登录(jQuery)</title>
+    <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.js" type="application/javascript"></script>
+    <script>
+        function crateXHR(){
+            if(window.XMLHttpRequest){
+                return new XMLHttpRequest();
+            }
+            else{
+                return new ActiveXObject("Microsoft:XMLHTTP");
+            }
+        }
+        function doLogin() {
+            var usernameValue = document.getElementById("username").value;
+            var userpwdValue = document.getElementById("userpwd").value;
+            // 使用$.ajax()发送Ajax请求
+            $.ajax({
+                type:"post",  // 指定请求的类型，默认是get
+                url:"login",  // 请求地址
+                async:true,   // 是否进行异步请求
+                // data:"username=" + usernameValue  + "&userpwd=" + userpwdValue, //发送的数据
+                // Json形式传输数据,传到服务器参数名要加上字符串
+                data:{
+                    "username":usernameValue,
+                    "userpwd":userpwdValue
+                },
+                dataType:"text", // 返回数据类型，默认是text
+                // ajax请求成功时的回调函数
+                success:function (data) {
+                    if(data=="true"){
+                        document.getElementById("loginDiv").hidden=true;
+                        document.getElementById("info").innerText="欢迎您! "+usernameValue;
+                    }
+                    else{
+                        alert("用户名或者密码错误!");
+                    }
+                },
+                // ajax请求失败的回调函数
+                error:function () {
+                    document.getElementById("info").innerText="ajax请求失败";
+                },
+                // 发送请求前的回调函数
+                beforeSend:function () {
+                    document.getElementById("info").innerText="登录中......";
+                }
+            })
+        }
+        function doLogin2() {
+            var usernameValue = document.getElementById("username").value;
+            var userpwdValue = document.getElementById("userpwd").value;
+            // 使用$.post()发送Ajax请求
+            $.post("login",{
+                "username":usernameValue,
+                "userpwd":userpwdValue
+            },function (data) {
+                if(data=="true"){
+                    document.getElementById("loginDiv").hidden=true;
+                    document.getElementById("info").innerText="欢迎您! "+usernameValue;
+                }
+                else{
+                    alert("用户名或者密码错误!");
+                }
+            },"text")
+        }
+    </script>
+</head>
+<body>
+    <div id="loginDiv">
+        用户名：<input type="text" id="username" name="username">
+        密　码：<input type="password" name="userpwd" id="userpwd">
+        <input type="button" value="登录" onclick="doLogin2()">
+    </div>
+    <span id="info"></span>
+</body>
+</html>

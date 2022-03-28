@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/css/test.css">
+    <title>Ajax基本的用法</title>
+    <script>
+        // document.onload = function () {
+        //    
+        // }
+        function sendSync() {
+            // 1、创建XMLHttpRequest对象
+            var xhr = new XMLHttpRequest();
+            // 2、初始化连接，以get方式与simple建立同步连接
+            xhr.open("get","simple",false);
+            // 3、发送请求
+            xhr.send(null);
+            // 4、获取响应数据
+            var data = xhr.responseText;
+            alert(data);
+        }
+        function sendAsync() {
+            var xhr = new XMLHttpRequest();
+            // 建立异步请求
+            xhr.open("get","simple",true);
+            xhr.send(null);
+            var data = xhr.responseText; //无法获取响应数据
+            alert(data);
+        }
+        //定义工厂函数
+        function createXHR() { //用于创建XMLHttpRequest对象，兼容不同的浏览器
+            if(window.XMLHttpRequest){
+                return new XMLHttpRequest();
+            }
+            else
+            {
+                return new ActiveXObject("Microsoft.XMLHTTP");//IE老版本浏览器
+            }
+        }
+        
+        function sendAsync2() {
+            var xhr = new createXHR();
+            // 指定事件回调函数，当就绪状态码发生改变时执行(回调函数一定要在发送send()之前绑定)
+            xhr.onreadystatechange = function (){
+                // alert(xhr.readyState); // 打印状态就绪码
+                // alert(xhr.status); // http请求响应的状态
+                // &&两边的顺序不能颠倒，要先判断readyState后判断status
+                if(xhr.readyState == 4 && xhr.status ==200){ // 就绪状态是4、状态码是200才能处理服务器数据
+                    var data = xhr.responseText; //获取响应数据
+                    alert(data);
+                }
+            }
+            // 建立异步请求
+            xhr.open("get","simple",true);
+            xhr.send(null);
+        }
+    </script>
+</head>
+<body>
+    <input type="button" value="发送同步请求" onclick="sendSync()">
+    <br>
+    <input type="button" value="发送异步请求" onclick="sendAsync()">
+    <br>
+    <input type="button" value="发送异步请求2" onclick="sendAsync2()">
+    <!--  同步请求的时候，没有完成的时候input输入框是没有办法进行输入的  -->
+
+    <!--  异步请求的时候，没有完成的时候input输入框仍然可以进行输入  -->
+    <hr>
+    <input type="text" name="username" id="username">
+    <!--
+      XMLHttpRequest既可以发送异步请求也可以发送同步请求
+      同步请求:在服务端响应之前浏览器处于阻塞状态，等待服务器响应，此时不能进行交互操作
+      异步请求:在服务端响应之前浏览器可以执行其他操作，无需等待响应
+      -->
+</body>
+</html>
