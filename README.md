@@ -290,23 +290,48 @@ function doLogin2() {
 
 ### $.getJSON()发送Ajax请求
 
-##### $.getJSON(url,data,success(result,status,xhr))
+$.getJSON(url,data,success(result,status,xhr))
 
-###### 常用参数
+#### 常用参数
 
 ![image-20210316133826549](C:\Users\10293\AppData\Roaming\Typora\typora-user-images\image-20210316133826549.png)
 
 *注：在jQuery中可以使用$.getJSON()方法发送JSON格式的数据到服务器端，或接收从服务器端返回的JSON格式的数据*。
 
+#### 示例
+
+```js
+// 使用getJSON请求json文件
+function doload() {
+    $.getJSON("course.json",{},function (data) {
+        $.each(data,function (index,course) {
+            $("<p>").html(course.id + "&nbsp;&nbsp;" + course.name + "&nbsp;&nbsp;" + course.period).appendTo($("#info"))
+        })
+    })
+}
+```
+
 ### $(selector).load()发送Ajax请求
 
-##### $(selector).load(url,data,function(result,status,xhr))
+$(selector).load(url,data,function(result,status,xhr))
 
-常用参数
+#### 常用参数
 
 ![image-20210316134342459](C:\Users\10293\AppData\Roaming\Typora\typora-user-images\image-20210316134342459.png)
 
-#### 序列化表单
+#### 示例
+
+```js
+function doload() {
+    $("#info").load("course.html",function () {
+        $("#info").css("color","red")
+    })
+}
+```
+
+
+
+## $(selece).serialize()序列化表单
 
 ```javascript
 // 能够对表单中含还有name属性的元素进行序列化，生成能够直接用于请求的参数字符串
@@ -322,5 +347,5 @@ console.log($("#myform").serialize()); // username=sadasd&userpwd=asdsads
 </div>
 ```
 
-注：只对form表单内的元素起作用！
+**注：只对form表单内的元素起作用！**
 

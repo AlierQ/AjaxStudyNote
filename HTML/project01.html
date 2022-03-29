@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>培训项目和课程的选择(纯文本)</title>
+    <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.js" type="application/javascript"></script>
+    <script>
+        $(function () {
+            $.get("getAllItme",function (data) {
+                data = data.substr(0,data.length-1) //删除最后一个”;“,避免分割的时候出现最后一个空字符串
+                var l = data.split(';')
+                $.each(l,function (index,item) {
+                    $("<option>").html(item.split(",")[1]).val(item.split(",")[0]).appendTo("#selTrainItem")
+                })
+            })
+        })
+    </script>
+    <style>
+        #info{
+            width: 500px;
+            height: 300px;
+            border: 1px solid red;
+            font-size: 24px;
+        }
+    </style>
+</head>
+<body>
+    <select name="" id="selTrainItem">
+        <option value="0">--选择培训项目--</option>
+    </select>
+    <select name="" id="selCourse">
+        <option value="0">--选择培训课程--</option>
+    </select>
+    <div id="info"></div>
+</body>
+<script>
+    var courseInfo
+    // 给item select绑定点击事件
+    $("#selTrainItem").on('change',function(){
+        // var checkText=$("#selTrainItem").find("option:selected").text();
+        var checkValue=$("#selTrainItem").val();
+        if(checkValue === "0") return
+        $.get("/getCourseByItmeId",{
+            "id":checkValue
+        },function (data) {
+            data = data.substr(0,data.length-1)
+            var l = data.split(";")
+            courseInfo = l
+            //清空之前的 并添加第一个元素
+            $("#selCourse").empty().prepend("<option value=\"0\">--选择培训课程--</option>")
+            $.each(l,function (index,item) {
+                $("<option>").html(item.split(',')[1]).val(item.split(',')[0]).appendTo("#selCourse")
+            })
+        })
+    });
+    // 给Course select添加改变事件
+    $("#selCourse").on("change",function () {
+        var checkValue=$("#selCourse").val();
+        if(checkValue === "0") return
+        // 清空 div
+        $("#info").empty()
+        $.each(courseInfo,function (index,item) {
+            if(checkValue === item.split(',')[0]){
+                $("<p>").html("课程详情:" + item.split(',')[3] + "<br>课程时长:" + item.split(',')[2]).appendTo("#info")
+            }
+        })
+    })
+</script>
+</html>

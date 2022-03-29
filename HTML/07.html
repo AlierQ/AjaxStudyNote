@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>使用serialize()序列化表单元素</title>
+    <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.js" type="application/javascript"></script>
+    <script>
+        function doLogin() {
+            // 普通方法
+            // var username = $("#username").val()
+            // var pwd = $("#userpwd").val()
+            // var parame = "username=" + username + "&pwd=" + pwd
+
+            // serialize方法
+            // 就是将form中具有name属性的元素
+            var parame = $("#loginDiv").serialize()
+            console.log(parame)
+        }
+    </script>
+</head>
+<body>
+    <form id="loginDiv">
+        用户名：<input type="text" id="username" name="username">
+        密　码：<input type="password" name="userpwd" id="userpwd">
+        <input type="button" value="登录" onclick="doLogin()">
+    </form>
+    <span id="info"></span>
+</body>
+</html>

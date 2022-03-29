@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>使用$.getJSON()发送Ajax请求</title>
+    <title>使用$(selector).load发送Ajax请求</title>
     <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/3.6.0/jquery.js" type="application/javascript"></script>
 </head>
 <body>
@@ -11,14 +11,9 @@
     <div id="info"></div>
 </body>
 <script>
-    // 哈哈
-    // 嘿嘿
     function doload() {
-        $.getJSON("course.json",{},function (data) {
-            $.each(data,function (index,course) {
-                $("<p>").html(course.id + "&nbsp;&nbsp;" + course.name + "&nbsp;&nbsp;" + course.period).appendTo($("#info"))
-
-            })
+        $("#info").load("course.html",function () {
+            $("#info").css("color","red")
         })
     }
 </script>
